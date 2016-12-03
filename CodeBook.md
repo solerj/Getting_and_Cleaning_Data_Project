@@ -68,3 +68,7 @@ Additional vectors obtained by averaging the signals in a signal window sample. 
 
 
 ##The transformations
+- The train data set and test data set were joined into one data set.
+- The variables with measurements of the mean and standard deviation were selected, and the column names were changed to describe the features.
+- The "Subject" and "Activity" variables were added as the first two columns of the data set.
+- The means for each combination of Subject and Activity were calculated.
