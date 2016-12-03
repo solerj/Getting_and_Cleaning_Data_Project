@@ -19,27 +19,29 @@ grep("mean\\(|std",features[,2],value = TRUE)
 #Extracting the selected list of features 
 merged2 <- merged[,grep("mean\\(|std",features[,2])]
 
-#Add in activity description
+#Add in Activity Label and Subject
 Activity <- read.table("./UCI HAR Dataset/activity_labels.txt")
 train_label <- read.table("./UCI HAR Dataset/train/Y_train.txt")
 test_label <- read.table("./UCI HAR Dataset/test/Y_test.txt")
 merged_l <- rbind(train_label,test_label)
-merged_l2 <- merge(merged_l,Activity,by="V1")
-all_data <- cbind(merged_l2$V2,merged2)
 
-#Renaming the columns
-colnames(all_data) <- c("Activity",grep("mean\\(|std",features[,2],value = TRUE))
-
-#Add in subject
 train_subject <- read.table("./UCI HAR Dataset/train/subject_train.txt")
 test_subject <- read.table("./UCI HAR Dataset/test/subject_test.txt")
 merged_s <- rbind(train_subject,test_subject)
-all_data_2 <- cbind(merged_s,all_data)
-colnames(all_data_2) <- c("Subject",colnames(all_data))
+
+all_data <- cbind(merged2, merged_s,merged_l)
+
+#Renaming the columns
+colnames(all_data) <- c(grep("mean\\(|std",features[,2],value = TRUE),"Subject","V1")
+all_data_2 <- merge(all_data, Activity, by="V1")
+names(all_data_2)[ncol(all_data_2)] <- "Activity"
+all_data_2 <- all_data_2[,2:ncol(all_data_2)]
+
+str(all_data_2)
 
 #Creating a dataset with the average of each variable for each activity and each subject
 all_data_2$Subject <- factor(all_data_2$Subject)
-data_agg <- aggregate(x=all_data_2[3:ncol(all_data_2)],by=list(all_data_2$Subject, all_data_2$Activity), FUN=mean)
+data_agg <- aggregate(x=all_data_2[,1:(ncol(all_data_2)-2)],by=list(all_data_2$Subject, all_data_2$Activity), FUN=mean)
 
 #Saving the final data tidy set as a text file in the working directory
 write.table(x=data_agg, file = "./Data_final.txt", row.names = FALSE)
