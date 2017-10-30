@@ -1,7 +1,7 @@
 # Getting_and_Cleaning_Data_Project
 Peer-graded Assignment
 
-##How the script works
+## How the script works
 
 If the Samsung Data file still needs to be downloaded and unzipped, you can uncomment the first few lines fo code as described within the code.
 
